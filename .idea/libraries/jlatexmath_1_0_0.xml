@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="jlatexmath-1.0.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jlatexmath-1.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Downloads/jlatexmath-master.zip!/jlatexmath-master/plugin/fop/src" />
+      <root url="jar://$USER_HOME$/Downloads/jlatexmath-master.zip!/jlatexmath-master/src" />
+      <root url="jar://$USER_HOME$/Downloads/jlatexmath-master.zip!/jlatexmath-master/examples/Basic" />
+      <root url="jar://$USER_HOME$/Downloads/jlatexmath-master.zip!/jlatexmath-master/examples/Export" />
+    </SOURCES>
+  </library>
+</component>
