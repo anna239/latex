@@ -1,7 +1,14 @@
-import org.scilab.forge.jlatexmath.{TeXParser, TeXFormula}
+import latex.calculator.TeXCalculator
+import latex.parser.ExpressionParser
+import latex.structure.ExpressionNode
+
 
 object Main extends App {
 
-  var parser = new TeXParser()
+  var f1:ExpressionParser = new ExpressionParser
 
+  val c = new TeXCalculator()
+  c.setVal("a", 3)
+  c.setVal("b", 4)
+  print(c.calculate(f1.parse("a+b")))
 }
