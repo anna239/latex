@@ -21,4 +21,24 @@ class ParserTest extends FlatSpec with ShouldMatchers {
     calculator.calculate(parser.parse("a/b")) should equal (3.0/7)
   }
 
+  "Parser" should "be able to parse comninations of simple operations" in {
+    val parser = new ExpressionParser
+    val calculator = new TeXCalculator
+    calculator.setVal("a", 3)
+    calculator.setVal("b", 4)
+    calculator.calculate(parser.parse("a+b-a")) should equal (4)
+    calculator.calculate(parser.parse("a*b-a")) should equal (3*4-3)
+    calculator.calculate(parser.parse("a/b-a")) should equal (3.0/4-3)
+  }
+
+  "Parser" should "respect the priority of simple operations" in {
+    val parser = new ExpressionParser
+    val calculator = new TeXCalculator
+    calculator.setVal("a", 2)
+    calculator.setVal("b", 4)
+    calculator.calculate(parser.parse("a+b*a-b")) should equal (2+4*2-4)
+    calculator.calculate(parser.parse("a*a+a/b")) should equal (2*2+2.0/4)
+    calculator.calculate(parser.parse("a+a/b*b-b*a+b")) should equal (2+2.0/4*4-4*2+4)
+  }
+
 }
