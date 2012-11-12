@@ -1,7 +1,9 @@
 package latex.parser
 
 import util.parsing.combinator.JavaTokenParsers
-import latex.structure.{Plus, BinOpNode, ExpressionNode, VarNode}
+import latex.structure._
+import latex.structure.BinOpNode
+import latex.structure.VarNode
 
 class ExpressionParser extends JavaTokenParsers {
   def expr : Parser[ExpressionNode] = binOp | variable
@@ -12,14 +14,21 @@ class ExpressionParser extends JavaTokenParsers {
     }
   }
 
-  def binOp: Parser[ExpressionNode] = variable ~ "+" ~ variable ^^ {
+  def binOp: Parser[ExpressionNode] = variable ~ """\+|-|\*|/""".r ~ variable ^^ {
     _ match {
-      case l ~ op ~ r => new BinOpNode(l, r, new Plus)
+      case l ~ "+" ~ r => new BinOpNode(l, r, Plus)
+      case l ~ "-" ~ r => new BinOpNode(l, r, Minus)
+      case l ~ "*" ~ r => new BinOpNode(l, r, Multiplication)
+      case l ~ "/" ~ r => new BinOpNode(l, r, Division)
     }
   }
 
   def parse(s: String):ExpressionNode = {
-    parseAll(expr, s).get
+    val result = parseAll(expr, s)
+    if (!result.successful) {
+      throw new RuntimeException("Could not parse:\n" + s)
+    }
+    result.get
   }
 
 }
