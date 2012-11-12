@@ -27,6 +27,7 @@ case class TeXCalculator() {
       case Minus => calculate(l) - calculate(r)
       case Multiplication => calculate(l) * calculate(r)
       case Division => calculate(l) / calculate(r)
+      case Power => math.pow(calculate(l), calculate(r))
     }
   }
 

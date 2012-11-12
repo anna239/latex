@@ -50,4 +50,12 @@ class ParserTest extends FlatSpec with ShouldMatchers {
     calculator.calculate(parser.parse("31233/a")) should equal (31233.0/2)
   }
 
+  "Parser" should "be able to parse power expressions" in {
+    val parser = new ExpressionParser
+    val calculator = new TeXCalculator
+    calculator.setVal("a", 2)
+    calculator.calculate(parser.parse("a^3")) should equal (8)
+    calculator.calculate(parser.parse("a-2^4")) should equal (2-16)
+  }
+
 }

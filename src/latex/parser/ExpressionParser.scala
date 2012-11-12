@@ -38,12 +38,16 @@ class ExpressionParser extends JavaTokenParsers {
         "/" ^^^ {
           (l: ExpressionNode, r: ExpressionNode) => new BinOpNode(l, r, Division)
         }
+      case 3 =>
+        "^" ^^^ {
+          (l: ExpressionNode, r: ExpressionNode) => new BinOpNode(l, r, Power)
+        }
       case _ => throw new RuntimeException("bad precedence level " + level)
     }
   }
 
   val minPrec = 1
-  val maxPrec = 2
+  val maxPrec = 3
 
   def binary(level: Int): Parser[ExpressionNode] =
     if (level > maxPrec) term
