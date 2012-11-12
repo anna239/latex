@@ -1,6 +1,5 @@
 import latex.calculator.TeXCalculator
 import latex.parser.ExpressionParser
-import latex.structure.ExpressionNode
 
 
 object Main extends App {
@@ -10,5 +9,5 @@ object Main extends App {
   val c = new TeXCalculator()
   c.setVal("a", 3)
   c.setVal("b", 4)
-  print(c.calculate(f1.parse("a+b")))
+  print(c.calculate(f1.parse("a*b")))
 }

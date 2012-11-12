@@ -14,7 +14,7 @@ class ExpressionParser extends JavaTokenParsers {
     }
   }
 
-  def binOp: Parser[ExpressionNode] = variable ~ """\+|-|\*|/""".r ~ variable ^^ {
+  def binOp: Parser[ExpressionNode] = variable ~ """[+*/-]""".r ~ variable ^^ {
     _ match {
       case l ~ "+" ~ r => new BinOpNode(l, r, Plus)
       case l ~ "-" ~ r => new BinOpNode(l, r, Minus)
