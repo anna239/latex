@@ -17,6 +17,7 @@ case class TeXCalculator() {
     formula match {
       case VarNode(name) => values(name).value
       case BinOpNode(left, right, op) => evalOp(left, right, op)
+      case IntLiteral(value) => value
     }
   }
 

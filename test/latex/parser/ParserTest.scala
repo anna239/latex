@@ -41,4 +41,13 @@ class ParserTest extends FlatSpec with ShouldMatchers {
     calculator.calculate(parser.parse("a+a/b*b-b*a+b")) should equal (2+2.0/4*4-4*2+4)
   }
 
+  "Parser" should "be able to parse integer literals" in {
+    val parser = new ExpressionParser
+    val calculator = new TeXCalculator
+    calculator.setVal("a", 2)
+    calculator.calculate(parser.parse("a*3")) should equal (6)
+    calculator.calculate(parser.parse("a-39")) should equal (2-39)
+    calculator.calculate(parser.parse("31233/a")) should equal (31233.0/2)
+  }
+
 }
