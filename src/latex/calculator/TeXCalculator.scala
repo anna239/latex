@@ -15,7 +15,6 @@ case class TeXCalculator() {
 
   def setVal(name: String, value: Int) {
     values += ((name, new TeXValue[Int](value)))
-    print(values)
   }
 
   def calculate(formula: Node):Double = {
