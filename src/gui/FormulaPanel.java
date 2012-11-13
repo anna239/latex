@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class FormulaPanel extends JPanel {
 
-    public FormulaPanel(String formula) {
+    public FormulaPanel(final String formula) {
         this.formula = formula;
         Box b1 = Box.createVerticalBox();
         Box b2 = Box.createHorizontalBox();
@@ -38,6 +38,12 @@ public class FormulaPanel extends JPanel {
         JButton eval = new JButton("EVAL");
         eval.addActionListener(new evalAction());
         JButton reset = new JButton("RESET");
+        reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setFormula(generateIcon(formula));
+            }
+        });
 
         buttons.add(eval);
         buttons.add(reset);
@@ -80,6 +86,7 @@ public class FormulaPanel extends JPanel {
                 double[] values = new double[tokens.length];
                 for (int i = 0; i < tokens.length; i++) {
                     String[] p = tokens[i].split("=");
+                    if(p == null || p.length < 2) continue;
                     varnames[i] = p[0];
                     values[i] = Double.parseDouble(p[1]);
                 }
@@ -94,5 +101,5 @@ public class FormulaPanel extends JPanel {
     private evalPanel evalDialog = null;
     private JLabel flabel;
     private JPanel buttons;
-    private String formula;
+    final private String formula;
 }
