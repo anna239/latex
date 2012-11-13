@@ -12,13 +12,13 @@ class ExpressionParser extends JavaTokenParsers {
 
   def parensExpr: Parser[ExpressionNode] = "(" ~> expr <~ ")" | "[" ~> expr <~ "]"
 
-  def intValue = """[0-9]+""".r ^^ {
+  def intValue = decimalNumber ^^ {
     _ match {
       case s => new IntLiteralNode(Integer.parseInt(s))
     }
   }
 
-  def doubleValue = """[0-9]+\.[0-9]+""".r ^^ {
+  def doubleValue = wholeNumber ^^ {
     _ match {
       case s => new DoubleLiteralNode(java.lang.Double.parseDouble(s))
     }
