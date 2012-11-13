@@ -21,6 +21,7 @@ import java.io.IOException;
 public class ScaLatex {
     public static void main(String[] args) {
         ScaLatexFrame frame = new ScaLatexFrame();
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
@@ -28,6 +29,7 @@ public class ScaLatex {
 
 class ScaLatexFrame extends JFrame {
     public ScaLatexFrame() {
+
         setTitle("ScaLaTex");
 
         JMenuBar bar = new JMenuBar();
@@ -54,6 +56,8 @@ class ScaLatexFrame extends JFrame {
         bar.add(menu);
         menu.add(item);
         setMinimumSize(new Dimension(400, 600));
+
+        setLocationRelativeTo(null);
     }
 
     JScrollPane pane = null;

@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
  * User: stels
  * Date: 13.11.12
  * Time: 15:18
- * To change this template use File | Settings | File Templates.
  */
 public class EvalPanel extends JPanel {
     private JTextField args;
@@ -19,44 +18,39 @@ public class EvalPanel extends JPanel {
     private boolean ok;
 
     public EvalPanel() {
-        setLayout(new BorderLayout());
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(1,2));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
-        panel.add(new JLabel("Args: "));
+        panel.add(new JLabel(" Args: "), new GridBagConstraints());
         panel.add(args = new JTextField(""));
-        add(panel, BorderLayout.CENTER);
+
+        add(panel);
         okButton = new JButton("Ok");
-        okButton.addActionListener(new ActionListener()
-                                   {
-                                       public void actionPerformed(ActionEvent event)
-                                       {
-                                           ok = true;
-                                           dialog.setVisible(false);
-                                       }
-                                   });
+        okButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                ok = true;
+                dialog.setVisible(false);
+            }
+        });
 
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new
-                                        ActionListener()
-                                       {
-                                           public void actionPerformed(ActionEvent event)
-                                           {
-                                               dialog.setVisible(false);
-                                           }
-                                       });
+        cancelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                dialog.setVisible(false);
+            }
+        });
 
         // add buttons to southern border
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(okButton);
         buttonPanel.add(cancelButton);
-        add(buttonPanel, BorderLayout.SOUTH);
+        add(buttonPanel);
     }
 
-    public boolean showDialog(Component parent, String title)
-    {
+    public boolean showDialog(Component parent, String title) {
         ok = false;
 
         // locate the owner frame
@@ -65,17 +59,17 @@ public class EvalPanel extends JPanel {
         if (parent instanceof Frame)
             owner = (Frame) parent;
         else
-            owner = (Frame)SwingUtilities.getAncestorOfClass(
+            owner = (Frame) SwingUtilities.getAncestorOfClass(
                     Frame.class, parent);
 
         // if first time, or if owner has changed, make new dialog
 
-        if (dialog == null || dialog.getOwner() != owner)
-        {
+        if (dialog == null || dialog.getOwner() != owner) {
             dialog = new JDialog(owner, true);
             dialog.getContentPane().add(this);
             dialog.getRootPane().setDefaultButton(okButton);
             dialog.pack();
+            dialog.setLocationRelativeTo(null);
         }
 
         // set title and show dialog
