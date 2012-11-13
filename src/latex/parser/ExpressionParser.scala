@@ -8,7 +8,9 @@ import latex.structure.VarNode
 class ExpressionParser extends JavaTokenParsers {
   def expr = binary(minPrec) | term
 
-  def term = variable | intValue
+  def term = variable | intValue | parensExpr
+
+  def parensExpr: Parser[ExpressionNode] = "(" ~> expr <~ ")"
 
   def intValue = """[0-9]+""".r ^^ {
     _ match {
