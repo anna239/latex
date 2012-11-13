@@ -12,13 +12,13 @@ import java.awt.event.ActionListener;
  * Time: 15:18
  * To change this template use File | Settings | File Templates.
  */
-public class evalPanel extends JPanel {
+public class EvalPanel extends JPanel {
     private JTextField args;
     private JButton okButton;
     private JDialog dialog;
     private boolean ok;
 
-    public evalPanel() {
+    public EvalPanel() {
         setLayout(new BorderLayout());
 
         JPanel panel = new JPanel();

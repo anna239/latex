@@ -7,9 +7,9 @@ import latex.structure.VarNode
 
 class ExpressionParser extends JavaTokenParsers {
 
-  def expr = texFunction | binary(minPrec) | term
+  def expr = binary(minPrec) | term
 
-  def term = variable | doubleValue | intValue | parensExpr
+  def term = variable | doubleValue | intValue | parensExpr | greekLetter | texFunction
 
   def parensExpr: Parser[ExpressionNode] = "(" ~> expr <~ ")" | "[" ~> expr <~ "]"
 
@@ -38,6 +38,23 @@ class ExpressionParser extends JavaTokenParsers {
   def texFunction: Parser[FunctionNode] = texOperator ~ rep(arg) ^^ {
     _ match {
       case s => new FunctionNode(Function.forName(s._1),  s._2)
+    }
+  }
+
+  def greekLetterName: Parser[String] = {
+    val varLetters = Vector("epsilon", "theta", "kappa", "pi", "rho", "sigma", "phi")
+    val smallLetters = Vector("beta", "gamma", "delta", "zeta", "eta",
+      "iota", "mu", "nu", "xi", "omicron", "tau", "upsilon", "chi", "psi", "omega")
+
+    val allSmallLetters = varLetters ++ smallLetters
+    val capitalizedLetters: Vector[String] = allSmallLetters.map(s => s.capitalize)
+    val allLetters = (varLetters.map(s => "var" + s) ++ allSmallLetters ++ capitalizedLetters)
+    allLetters.foldLeft("alpha" | "Alpha")((l, r) => l | r)
+  }
+
+  def greekLetter: Parser[VarNode] = "\\" ~> greekLetterName ^^ {
+    _ match {
+      case s => new VarNode(s)
     }
   }
 
@@ -86,6 +103,7 @@ class ExpressionParser extends JavaTokenParsers {
 
   def parse(s: String): ExpressionNode = {
     val result = parseAll(expr, s)
+    print(result)
     result.getOrElse(throw new RuntimeException("Could not parse:\n" + s))
   }
 }

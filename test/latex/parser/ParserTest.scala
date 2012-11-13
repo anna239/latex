@@ -73,11 +73,18 @@ class ParserTest extends FlatSpec with ShouldMatchers {
 
   "Parser" should "be able to parse simple predefined functions" in {
     val parser = new ExpressionParser
-    parser.parse("\\sqrt {2}")
+    val calculator = new TeXCalculator
+    calculator.calculate(parser.parse("\\sqrt {4}")) shouldBe 2
     parser.parse("\\frac {x+y-z} {2^x}")
     parser.parse("\\sqrt {a+b} {10}")
     parser.parse("\\sqrt 2 3")
     parser.parse("\\sqrt {1+3} 4")
     parser.parse("\\frac {1+2} b")
+    parser.parse("\\sqrt {a+b} {10} + \\sqrt {3}")
+  }
+
+  "Parser" should "parse greek letters properly" in {
+    val parser = new ExpressionParser
+    parser.parse("\\rho + \\varsigma")
   }
 }

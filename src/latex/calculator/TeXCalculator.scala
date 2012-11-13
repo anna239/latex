@@ -8,6 +8,7 @@ import latex.structure.Plus
 case class TeXCalculator() {
 
   val values = new mutable.HashMap[String, TeXValue[Double]]()
+  values += (("pi", new TeXValue[Double](3.14)))
 
   def setVal(name: String, value: Double) {
     values += ((name, new TeXValue[Double](value)))
@@ -20,13 +21,29 @@ case class TeXCalculator() {
   def calculate(formula: Node): Double = {
     formula match {
       case VarNode(name) => values(name).value
-      case BinOpNode(left, right, op) => evalOp(left, right, op)
       case IntLiteralNode(value) => value
       case DoubleLiteralNode(value) => value
+      case BinOpNode(left, right, op) => evalBinOp(left, right, op)
+      case FunctionNode(function, arguments) => evalFunction(function, arguments)
+      case UnOpNode(op, operand) => evalUnaryOp(op, operand)
     }
   }
 
-  def evalOp(l: ExpressionNode, r: ExpressionNode, op: BinaryOperation) = {
+  private def evalUnaryOp(op: UnaryOperation, operand: ExpressionNode): Double = {
+    op match {
+      case UnaryMinus => -calculate(operand)
+    }
+  }
+
+  private def evalFunction(func: Function, args: List[ExpressionNode]): Double = {
+    func match {
+      case SqrtFunction => math.sqrt(calculate(SqrtFunction.getArgument(args)))
+      case SqrtnFunction => math.pow(calculate(SqrtnFunction.getArgument(args)), calculate(SqrtnFunction.getDegree(args)))
+      case FracFunction => calculate(FracFunction.getNominator(args)) / calculate(FracFunction.getDenominator(args))
+    }
+  }
+
+  private def evalBinOp(l: ExpressionNode, r: ExpressionNode, op: BinaryOperation): Double = {
     op match {
       case Plus => calculate(l) + calculate(r)
       case Minus => calculate(l) - calculate(r)
