@@ -7,7 +7,7 @@ import latex.structure.Plus
 
 case class TeXCalculator() {
 
-  val values = new mutable.HashMap[String, TeXValue[Int]]()
+  val values = new mutable.HashMap[String, TeXValue[_]]()
 
   def setVal(name: String, value: Int) {
     values += ((name, new TeXValue[Int](value)))

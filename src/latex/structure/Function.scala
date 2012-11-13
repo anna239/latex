@@ -11,3 +11,7 @@ abstract sealed case class Function(name: String)
 
 abstract sealed case class FixedArgumentsFunction(override val name: String, argumentsCount: Int) extends Function(name)
 
+case object SqrtFunction extends FixedArgumentsFunction("sqrt", 1)
+case object SqrtnFunction extends FixedArgumentsFunction("sqrtn", 1)
+case object FracFunction extends FixedArgumentsFunction("frac", 2)
+
