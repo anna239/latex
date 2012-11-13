@@ -56,18 +56,21 @@ class ScaLatexFrame extends JFrame {
         setMinimumSize(new Dimension(400, 600));
     }
 
+    JScrollPane pane = null;
 
     private void addContent(String filename) {
-        getContentPane().removeAll();
+        if(pane != null){
+            remove(pane);
+            pack();
+        }
 
         String[] formulae = new FormulaExtractor().extract(new File(filename));
 //        String[] formulae = new String[20];
 //        for (int i = 0; i < formulae.length; i++) formulae[i] = "a + b = ";
-        ScaLatexPanel panel = new ScaLatexPanel(formulae);
 
-        JScrollPane pane = new JScrollPane(panel);
+        pane = new JScrollPane(new ScaLatexPanel(formulae));
 
-        getContentPane().add(pane);
+        add(pane);
 
         pack();
     }
