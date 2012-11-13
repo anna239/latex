@@ -4,6 +4,7 @@ import latex.formulaextractor.FormulaExtractor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,7 +26,12 @@ class ScaLatexFrame extends JFrame
     public ScaLatexFrame()
     {
         setTitle("ScaLaTex");
-        formulae = new String[]{"\\frac {V_m} {K_M+S} = ", "a ^ 2 + b ^ 2 = ", "\\sqrt[3]{x+1} =  ", "\\int_{0}^{3} f(x) dx ="};
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File("."));
+        chooser.showOpenDialog(this);
+        String filename = chooser.getSelectedFile().getAbsolutePath();
+
+        formulae = (String[])new FormulaExtractor().extract(new File(filename));//new String[]{"\\frac {V_m} {K_M+S} = ", "a ^ 2 + b ^ 2 = ", "\\sqrt[3]{x+1} =  ", "\\int_{0}^{3} f(x) dx ="};
         ScaLatexPanel panel = new ScaLatexPanel(formulae);
         Container contentPane = getContentPane();
         contentPane.add(panel);
