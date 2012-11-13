@@ -26,7 +26,18 @@ case class TeXCalculator() {
       case BinOpNode(left, right, op) => evalBinOp(left, right, op)
       case FunctionNode(function, arguments) => evalFunction(function, arguments)
       case UnOpNode(op, operand) => evalUnaryOp(op, operand)
+      case SumNode(sumVar, from, to, body) => evalSumNode(sumVar, calculate(from).toInt, calculate(to).toInt, body)
     }
+  }
+
+  def evalSumNode(sumVar: VarNode, from: Int, to: Int, body: ExpressionNode):Double = {
+    var result:Double = 0
+    for (i <- from to to) {
+      values += ((sumVar.name, new TeXValue[Double](i)))
+      result += calculate(body)
+      values.remove(sumVar.name)
+    }
+    result
   }
 
   private def evalUnaryOp(op: UnaryOperation, operand: ExpressionNode): Double = {
@@ -51,6 +62,8 @@ case class TeXCalculator() {
       case ArcCotFunction => math.atan(1 / calculate(ArcCotFunction.getArgument(args)))
     }
   }
+
+
 
   private def evalBinOp(l: ExpressionNode, r: ExpressionNode, op: BinaryOperation): Double = {
     op match {

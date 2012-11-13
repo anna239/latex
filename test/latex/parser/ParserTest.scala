@@ -97,5 +97,11 @@ class ParserTest extends FlatSpec with ShouldMatchers {
     print(calculator.calculate(parser.parse("(\\cos^2 2) + (\\sin^2 2) ")))
   }
 
+  "Parser" should "parse sum" in {
+    val parser = new ExpressionParser
+    val calculator = new TeXCalculator
+    print(calculator.calculate(parser.parse("\\sum_{i=0}^{10} i")))
+  }
+
 
 }

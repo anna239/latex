@@ -9,11 +9,24 @@ class ExpressionParser extends JavaTokenParsers {
 
   def expr = binary(minPrec) | term
 
-  def singleTerm = variable | doubleValue | intValue | parensExpr | greekLetter
+  def singleTerm = variable | doubleValue | intValue | parensExpr
 
-  def term = singleTerm | mathFunction | texFunction
+  def term = singleTerm | sum | mathFunction | texFunction
 
   def parensExpr: Parser[ExpressionNode] = "(" ~> expr <~ ")" | "[" ~> expr <~ "]"
+
+  def sumDeclaration: Parser[(VarNode, ExpressionNode, ExpressionNode)] = "\\sum_{" ~> (((variable~"="~expr) <~ "}^") ~ arg) ^^ {
+    _ match {
+      case s => ((s._1._1._1, s._1._2, s._2))
+    }
+  }
+
+
+  def sum: Parser[ExpressionNode] = sumDeclaration ~ expr ^^ {
+    _ match {
+      case s => new SumNode(s._1._1, s._1._2, s._1._3, s._2)
+    }
+  }
 
   def intValue = wholeNumber ^^ {
     _ match {
@@ -63,11 +76,11 @@ class ExpressionParser extends JavaTokenParsers {
     allLetters.foldLeft(alwaysFails)((l, r) => l | r)
   }
 
-  def greekLetter: Parser[VarNode] = "\\" ~> greekLetterName ^^ {
-    _ match {
-      case s => new VarNode(s)
-    }
-  }
+//  def greekLetter: Parser[VarNode] = "\\" ~> greekLetterName ^^ {
+//    _ match {
+//      case s => new VarNode(s)
+//    }
+//  }
 
   def doubleValue = decimalNumber ^^ {
     _ match {
@@ -75,7 +88,7 @@ class ExpressionParser extends JavaTokenParsers {
     }
   }
 
-  def variable: Parser[ExpressionNode] = """[a-zA-Z]+""".r ^^ {
+  def variable: Parser[VarNode] = (ident | greekLetterName) ^^ {
     _ match {
       case s => new VarNode(s)
     }

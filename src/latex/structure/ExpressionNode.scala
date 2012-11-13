@@ -13,3 +13,5 @@ sealed trait LiteralNode extends ExpressionNode
 case class IntLiteralNode(value: Int) extends LiteralNode
 case class DoubleLiteralNode(value: Double) extends LiteralNode
 
+case class SumNode(sumVar: VarNode, from: ExpressionNode, to: ExpressionNode, body: ExpressionNode) extends ExpressionNode
+
