@@ -9,7 +9,9 @@ class ExpressionParser extends JavaTokenParsers {
 
   def expr = binary(minPrec) | term
 
-  def term = variable | doubleValue | intValue | parensExpr | greekLetter | texFunction
+  def singleTerm = variable | doubleValue | intValue | parensExpr | greekLetter
+
+  def term = singleTerm | mathFunction | texFunction
 
   def parensExpr: Parser[ExpressionNode] = "(" ~> expr <~ ")" | "[" ~> expr <~ "]"
 
@@ -19,7 +21,10 @@ class ExpressionParser extends JavaTokenParsers {
     }
   }
 
-  def texOperator = "\\" ~> ident
+  def alwaysFails: Parser[String] = """\\0""".r
+
+  def texOperator:Parser[String] = "\\" ~> Function.predefinedFunctions.map(it => it.name).foldLeft(alwaysFails)((seed, it) => seed | it)
+  def mathOperator:Parser[String] = "\\" ~> Function.mathFunctions.map(it => it.name).foldLeft(alwaysFails)((seed:Parser[String], it:String) => seed | it)
 
   def oneCharVar = """[a-zA-Z]""".r ^^ {
     _ match {
@@ -33,23 +38,29 @@ class ExpressionParser extends JavaTokenParsers {
     }
   }
 
-  def arg = "{" ~> expr <~ "}" | digit | oneCharVar
+  def arg = "{" ~> expr <~ "}" | singleTerm
 
-  def texFunction: Parser[FunctionNode] = texOperator ~ rep(arg) ^^ {
+  def texFunction: Parser[FunctionNode] = texOperator ~ rep1(arg) ^^ {
     _ match {
       case s => new FunctionNode(Function.forName(s._1),  s._2)
     }
   }
 
+  def mathFunction: Parser[ExpressionNode] = mathOperator ~ "^" ~ singleTerm ~ rep1(arg) ^^ {
+    _ match {
+      case s => new BinOpNode(new FunctionNode(Function.forName(s._1._1._1), s._2), s._1._2, Power)
+    }
+  }
+
   def greekLetterName: Parser[String] = {
     val varLetters = Vector("epsilon", "theta", "kappa", "pi", "rho", "sigma", "phi")
-    val smallLetters = Vector("beta", "gamma", "delta", "zeta", "eta",
+    val smallLetters = Vector("alpha", "beta", "gamma", "delta", "zeta", "eta",
       "iota", "mu", "nu", "xi", "omicron", "tau", "upsilon", "chi", "psi", "omega")
 
     val allSmallLetters = varLetters ++ smallLetters
     val capitalizedLetters: Vector[String] = allSmallLetters.map(s => s.capitalize)
     val allLetters = (varLetters.map(s => "var" + s) ++ allSmallLetters ++ capitalizedLetters)
-    allLetters.foldLeft("alpha" | "Alpha")((l, r) => l | r)
+    allLetters.foldLeft(alwaysFails)((l, r) => l | r)
   }
 
   def greekLetter: Parser[VarNode] = "\\" ~> greekLetterName ^^ {

@@ -36,10 +36,19 @@ case class TeXCalculator() {
   }
 
   private def evalFunction(func: Function, args: List[ExpressionNode]): Double = {
+    //todo zeros
     func match {
       case SqrtFunction => math.sqrt(calculate(SqrtFunction.getArgument(args)))
       case SqrtnFunction => math.pow(calculate(SqrtnFunction.getArgument(args)), calculate(SqrtnFunction.getDegree(args)))
       case FracFunction => calculate(FracFunction.getNominator(args)) / calculate(FracFunction.getDenominator(args))
+      case SinFunction => math.sin(calculate(SinFunction.getArgument(args)))
+      case CosFunction => math.cos(calculate(CosFunction.getArgument(args)))
+      case TanFunction => math.tan(calculate(TanFunction.getArgument(args)))
+      case CotFunction => 1 / math.tan(calculate(CotFunction.getArgument(args)))
+      case ArcSinFunction => math.asin(calculate(ArcSinFunction.getArgument(args)))
+      case ArcCosFunction => math.acos(calculate(ArcCosFunction.getArgument(args)))
+      case ArcTanFunction => math.atan(calculate(ArcTanFunction.getArgument(args)))
+      case ArcCotFunction => math.atan(1 / calculate(ArcCotFunction.getArgument(args)))
     }
   }
 

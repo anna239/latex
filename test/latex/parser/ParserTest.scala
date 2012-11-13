@@ -90,4 +90,12 @@ class ParserTest extends FlatSpec with ShouldMatchers {
     calculator.setVal("r", 3)
     calculator.calculate(parser.parse("\\pi * r^2 / 2")) shouldBe 14.13
   }
+
+  "Parser" should "parse trigonometric functions" in {
+    val parser = new ExpressionParser
+    val calculator = new TeXCalculator
+    print(calculator.calculate(parser.parse("(\\cos^2 2) + (\\sin^2 2) ")))
+  }
+
+
 }
