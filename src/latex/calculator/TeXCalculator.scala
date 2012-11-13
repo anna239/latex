@@ -13,6 +13,10 @@ case class TeXCalculator() {
     values += ((name, new TeXValue[Double](value)))
   }
 
+  def setContext(context: collection.Map[String, Double]) {
+    context.foreach {case (n, v) => values += ((n, new TeXValue[Double](v)))}
+  }
+
   def calculate(formula: Node): Double = {
     formula match {
       case VarNode(name) => values(name).value
