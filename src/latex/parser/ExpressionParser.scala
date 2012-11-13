@@ -103,8 +103,7 @@ class ExpressionParser extends JavaTokenParsers {
 
   def parse(s: String): ExpressionNode = {
     val result = parseAll(expr, s)
-    print(result)
-    result.getOrElse(throw new RuntimeException("Could not parse:\n" + s))
+    result.getOrElse(throw new RuntimeException("Could not parse:\n" + result.toString))
   }
 }
 
