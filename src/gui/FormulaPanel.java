@@ -1,5 +1,7 @@
 package gui;
 
+import latex.calculator.TeXCalculator;
+import latex.parser.ExpressionParser;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
@@ -9,6 +11,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,17 +24,11 @@ import java.awt.image.BufferedImage;
 public class FormulaPanel extends JPanel {
 
     public FormulaPanel(String formula) {
+        this.formula = formula;
         Box b1 = Box.createVerticalBox();
         Box b2 = Box.createHorizontalBox();
-        TeXFormula tf = new TeXFormula(formula);
-        TeXIcon icon = tf.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20);
-        icon.setInsets(new Insets(5, 5, 5, 5));
 
-        BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = image.createGraphics();
-        g2.fillRect(0,0,icon.getIconWidth(),icon.getIconHeight());
-        flabel = new JLabel();
-        flabel.setIcon(icon);
+        setFormula(generateIcon(formula));
 
         buttons = new JPanel();
         buttons.setLayout(new GridLayout(1,2));
@@ -49,6 +47,21 @@ public class FormulaPanel extends JPanel {
         add(b1);
     }
 
+    private void setFormula(TeXIcon icon) {
+        BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = image.createGraphics();
+        g2.fillRect(0,0,icon.getIconWidth(),icon.getIconHeight());
+        flabel = new JLabel();
+        flabel.setIcon(icon);
+    }
+
+
+    private TeXIcon generateIcon(String formula) {
+        TeXFormula tf = new TeXFormula(formula);
+        TeXIcon icon = tf.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20);
+        icon.setInsets(new Insets(5, 5, 5, 5));
+        return icon;
+    }
     class evalAction implements ActionListener {
 
         @Override
@@ -57,7 +70,22 @@ public class FormulaPanel extends JPanel {
                 evalDialog = new evalPanel();
             }
             if(evalDialog.showDialog(FormulaPanel.this, "Arguments Input")) {
-
+                String s = evalDialog.getArgs();
+                if (s == null) {
+                    s = "" ;
+                }
+                String[] tokens = s.split(";");
+                String[] varnames = new String[tokens.length];
+                double[] values = new double[tokens.length];
+                for (int i = 0; i < tokens.length; i++) {
+                    String[] p = tokens[i].split("=");
+                    varnames[i] = p[0];
+                    values[i] = Double.parseDouble(p[1]);
+                }
+                TeXCalculator calc = new TeXCalculator();
+                calc.setContext(varnames, values);
+                double res = calc.calculate(new ExpressionParser().parse(formula));
+                setFormula(generateIcon(formula + " = " + res));
             }
         }
     }
@@ -65,5 +93,5 @@ public class FormulaPanel extends JPanel {
     private evalPanel evalDialog = null;
     private JLabel flabel;
     private JPanel buttons;
+    private String formula;
 }
-

@@ -39,7 +39,7 @@ public class evalPanel extends JPanel {
 
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(new
-                                       ActionListener()
+                                        ActionListener()
                                        {
                                            public void actionPerformed(ActionEvent event)
                                            {
