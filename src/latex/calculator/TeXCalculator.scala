@@ -15,7 +15,7 @@ case class TeXCalculator() {
 
   def calculate(formula: Node): Double = {
     formula match {
-      case VarNode(name) => values(name).value
+    //  case VarNode(name) => values(name).value
       case BinOpNode(left, right, op) => evalOp(left, right, op)
       case IntLiteralNode(value) => value
     }
