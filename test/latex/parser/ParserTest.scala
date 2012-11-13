@@ -68,4 +68,10 @@ class ParserTest extends FlatSpec with ShouldMatchers {
     calculator.calculate(parser.parse("((a+2)*(a+3)) *(2)")) should equal (40)
     calculator.calculate(parser.parse("([a+2]*(a+3)) *[2]")) should equal (40)
   }
+
+  "Parser" should "be able to parse simple predefined functions" in {
+    val parser = new ExpressionParser
+    parser.parse("\\sqrt 2")
+    parser.parse("\\sqrt 10 2")
+  }
 }
