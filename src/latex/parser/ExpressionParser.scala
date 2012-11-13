@@ -6,6 +6,7 @@ import latex.structure.BinOpNode
 import latex.structure.VarNode
 
 class ExpressionParser extends JavaTokenParsers {
+
   def expr = texFunction | binary(minPrec) | term
 
   def term = variable | doubleValue | intValue | parensExpr
@@ -20,9 +21,9 @@ class ExpressionParser extends JavaTokenParsers {
 
   def texOperator = "\\" ~> ident
 
-  def arg = "{" ~> expr <~ "{"
+  def arg = "{" ~> expr <~ "}"
 
-  def texFunction: Parser[FunctionNode] = texOperator ~ rep(intValue) ^^ {
+  def texFunction: Parser[FunctionNode] = texOperator ~ rep(arg) ^^ {
     _ match {
       case s => new FunctionNode(Function.forName(s._1),  s._2)
     }

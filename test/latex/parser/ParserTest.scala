@@ -71,7 +71,8 @@ class ParserTest extends FlatSpec with ShouldMatchers {
 
   "Parser" should "be able to parse simple predefined functions" in {
     val parser = new ExpressionParser
-    parser.parse("\\sqrt 2")
-    parser.parse("\\sqrt 10 2")
+    parser.parse("\\sqrt {2}")
+    parser.parse("\\frac {x+y-z} {2^x}")
+    parser.parse("\\sqrt {a+b} {10}")
   }
 }
