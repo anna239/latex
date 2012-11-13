@@ -9,14 +9,11 @@ public class ScaLatexPanel extends JPanel {
         BoxLayout bl = new BoxLayout(panel, BoxLayout.Y_AXIS);
         panel.setLayout(bl);
 
-        JScrollPane pane = new JScrollPane(panel);
-        add(pane, BorderLayout.CENTER);
+        add(panel);
 
-        setPreferredSize(new Dimension(400, 600));
-
-        for (int i = 0; i < formulae.length; i++) {
+        for (String aFormulae : formulae) {
             try {
-                panel.add(new FormulaPanel(formulae[i]));
+                panel.add(new FormulaPanel(aFormulae));
             } catch (Exception e) {
                 e.printStackTrace();
             }

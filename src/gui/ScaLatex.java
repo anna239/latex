@@ -31,10 +31,14 @@ class ScaLatexFrame extends JFrame
         chooser.showOpenDialog(this);
         String filename = chooser.getSelectedFile().getAbsolutePath();
 
-        formulae = (String[])new FormulaExtractor().extract(new File(filename));//new String[]{"\\frac {V_m} {K_M+S} = ", "a ^ 2 + b ^ 2 = ", "\\sqrt[3]{x+1} =  ", "\\int_{0}^{3} f(x) dx ="};
+        formulae = new FormulaExtractor().extract(new File(filename));
         ScaLatexPanel panel = new ScaLatexPanel(formulae);
         Container contentPane = getContentPane();
-        contentPane.add(panel);
+
+        JScrollPane pane = new JScrollPane(panel);
+
+        contentPane.add(pane);
+
         pack();
     }
 
