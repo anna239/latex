@@ -74,5 +74,8 @@ class ParserTest extends FlatSpec with ShouldMatchers {
     parser.parse("\\sqrt {2}")
     parser.parse("\\frac {x+y-z} {2^x}")
     parser.parse("\\sqrt {a+b} {10}")
+    parser.parse("\\sqrt 2 3")
+    parser.parse("\\sqrt {1+3} 4")
+    parser.parse("\\frac {1+2} b")
   }
 }

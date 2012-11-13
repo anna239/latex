@@ -21,7 +21,19 @@ class ExpressionParser extends JavaTokenParsers {
 
   def texOperator = "\\" ~> ident
 
-  def arg = "{" ~> expr <~ "}"
+  def oneCharVar = """[a-zA-Z]""".r ^^ {
+    _ match {
+      case s => new VarNode(s)
+    }
+  }
+
+  def digit = """[0-9]""".r ^^ {
+    _ match {
+      case s => new IntLiteralNode(Integer.parseInt(s))
+    }
+  }
+
+  def arg = "{" ~> expr <~ "}" | digit | oneCharVar
 
   def texFunction: Parser[FunctionNode] = texOperator ~ rep(arg) ^^ {
     _ match {
@@ -35,7 +47,7 @@ class ExpressionParser extends JavaTokenParsers {
     }
   }
 
-  def variable: Parser[ExpressionNode] = """[a-z]+""".r ^^ {
+  def variable: Parser[ExpressionNode] = """[a-zA-Z]+""".r ^^ {
     _ match {
       case s => new VarNode(s)
     }
