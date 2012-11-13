@@ -86,7 +86,7 @@ class ParserTest extends FlatSpec with ShouldMatchers {
   "Parser" should "parse greek letters properly" in {
     val parser = new ExpressionParser
     val calculator = new TeXCalculator
-    parser.parse("\rho + \\varsigma")
+    parser.parse("\\rho + \\varsigma")
     calculator.setVal("r", 3)
     calculator.calculate(parser.parse("\\pi * r^2 / 2")) shouldBe 14.13
   }
