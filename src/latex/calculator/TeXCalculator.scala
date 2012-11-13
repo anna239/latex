@@ -17,11 +17,11 @@ case class TeXCalculator() {
     formula match {
       case VarNode(name) => values(name).value
       case BinOpNode(left, right, op) => evalOp(left, right, op)
-      case IntLiteral(value) => value
+      case IntLiteralNode(value) => value
     }
   }
 
-  def evalOp(l: ExpressionNode, r: ExpressionNode, op: Operation) = {
+  def evalOp(l: ExpressionNode, r: ExpressionNode, op: BinaryOperation) = {
     op match {
       case Plus => calculate(l) + calculate(r)
       case Minus => calculate(l) - calculate(r)

@@ -12,7 +12,7 @@ class ExpressionParser extends JavaTokenParsers {
 
   def intValue = """[0-9]+""".r ^^ {
     _ match {
-      case s => new IntLiteral(Integer.parseInt(s))
+      case s => new IntLiteralNode(Integer.parseInt(s))
     }
   }
 
