@@ -32,6 +32,8 @@ class ScaLatexFrame extends JFrame
         String filename = chooser.getSelectedFile().getAbsolutePath();
 
         formulae = new FormulaExtractor().extract(new File(filename));
+//        formulae = new String[20];
+//        for (int i = 0; i < formulae.length; i++) formulae[i] = "a + b = ";
         ScaLatexPanel panel = new ScaLatexPanel(formulae);
         Container contentPane = getContentPane();
 

@@ -6,6 +6,8 @@ import org.scilab.forge.jlatexmath.TeXIcon;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 /**
@@ -34,6 +36,7 @@ public class FormulaPanel extends JPanel {
         buttons.setLayout(new GridLayout(1,2));
 
         JButton eval = new JButton("EVAL");
+        eval.addActionListener(new evalAction());
         JButton reset = new JButton("RESET");
 
         buttons.add(eval);
@@ -46,6 +49,20 @@ public class FormulaPanel extends JPanel {
         add(b1);
     }
 
+    class evalAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(evalDialog == null) {
+                evalDialog = new evalPanel();
+            }
+            if(evalDialog.showDialog(FormulaPanel.this, "Arguments Input")) {
+
+            }
+        }
+    }
+
+    private evalPanel evalDialog = null;
     private JLabel flabel;
     private JPanel buttons;
 }
