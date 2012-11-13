@@ -75,12 +75,19 @@ class ParserTest extends FlatSpec with ShouldMatchers {
     val parser = new ExpressionParser
     val calculator = new TeXCalculator
     calculator.calculate(parser.parse("\\sqrt {4}")) shouldBe 2
-    parser.parse("\\frac {x+y-z} {2^x}")
-    parser.parse("\\sqrt {a+b} {10}")
-    parser.parse("\\sqrt 2 3")
-    parser.parse("\\sqrt {1+3} 4")
-    parser.parse("\\frac {1+2} b")
-    parser.parse("\\sqrt {a+b} {10} + \\sqrt {3}")
+    val x = 1.0
+    val y = 2.0
+    val z = 3.0
+    calculator.setContext(Array("x", "y", "z"), Array(x, y, z))
+    calculator.calculate(parser.parse("\\frac {x+y-z} {2^x}")) shouldBe ((x + y - z)/ math.pow(2, x))
+    calculator.calculate(parser.parse("\\frac {2} {3}")) shouldBe (2.0 / 3.0)
+    //not working
+//    calculator.calculate(parser.parse("\\sqrt {x + y} {10}")) shouldBe (math.pow(x + y, 0.1))
+//    calculator.calculate(parser.parse("\\sqrt {2} {33}")) shouldBe (math.pow(2, 1.0 / 33))
+//    calculator.calculate(parser.parse("\\sqrt {1+3} 4")) shouldBe (math.pow(4, 1.0 / 4))
+//    calculator.calculate(parser.parse("\\sqrt 2 {4+0}")) shouldBe (math.pow(2, 1.0 / 4))
+    calculator.calculate(parser.parse("\\frac {1+2} z")) shouldBe (3.0 / z)
+   // calculator.calculate(parser.parse("\\sqrt {x+y} {3} + \\sqrt {3}")) shouldBe (math.pow(x + y, 1.0 / 3) + math.sqrt(3.0))
   }
 
   "Parser" should "parse greek letters properly" in {

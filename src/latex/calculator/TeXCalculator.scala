@@ -51,7 +51,7 @@ case class TeXCalculator() {
     //todo zeros
     func match {
       case SqrtFunction => math.sqrt(calculate(SqrtFunction.getArgument(args)))
-      case SqrtnFunction => math.pow(calculate(SqrtnFunction.getArgument(args)), calculate(SqrtnFunction.getDegree(args)))
+      case SqrtnFunction => math.pow(calculate(SqrtnFunction.getArgument(args)), 1.0 / calculate(SqrtnFunction.getDegree(args)))
       case FracFunction => calculate(FracFunction.getNominator(args)) / calculate(FracFunction.getDenominator(args))
       case SinFunction => math.sin(calculate(SinFunction.getArgument(args)))
       case CosFunction => math.cos(calculate(CosFunction.getArgument(args)))
