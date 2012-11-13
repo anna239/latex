@@ -58,13 +58,14 @@ class ParserTest extends FlatSpec with ShouldMatchers {
     calculator.calculate(parser.parse("a-2^4")) should equal (2-16)
   }
 
-  "Parser" should "be able to parse simple parenthesized expressions" in {
+  "Parser" should "be able to parse simple parenthesized and bracketed expressions" in {
     val parser = new ExpressionParser
     val calculator = new TeXCalculator
     calculator.setVal("a", 2)
     calculator.calculate(parser.parse("5*(a+2)")) should equal (20)
-    calculator.calculate(parser.parse("(a+2)^3")) should equal (64)
+    calculator.calculate(parser.parse("[a+2]^3")) should equal (64)
     calculator.calculate(parser.parse("(a+2)*(a+3)")) should equal (20)
     calculator.calculate(parser.parse("((a+2)*(a+3)) *(2)")) should equal (40)
+    calculator.calculate(parser.parse("([a+2]*(a+3)) *[2]")) should equal (40)
   }
 }

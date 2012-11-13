@@ -10,7 +10,7 @@ class ExpressionParser extends JavaTokenParsers {
 
   def term = variable | intValue | parensExpr
 
-  def parensExpr: Parser[ExpressionNode] = "(" ~> expr <~ ")"
+  def parensExpr: Parser[ExpressionNode] = "(" ~> expr <~ ")" | "[" ~> expr <~ "]"
 
   def intValue = """[0-9]+""".r ^^ {
     _ match {
