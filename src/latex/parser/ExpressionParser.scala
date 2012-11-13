@@ -4,6 +4,7 @@ import util.parsing.combinator.JavaTokenParsers
 import latex.structure._
 import latex.structure.BinOpNode
 import latex.structure.VarNode
+import com.sun.xml.internal.xsom.impl.parser.state.group
 
 class ExpressionParser extends JavaTokenParsers {
 
@@ -76,11 +77,11 @@ class ExpressionParser extends JavaTokenParsers {
     allLetters.foldLeft(alwaysFails)((l, r) => l | r)
   }
 
-//  def greekLetter: Parser[VarNode] = "\\" ~> greekLetterName ^^ {
-//    _ match {
-//      case s => new VarNode(s)
-//    }
-//  }
+  def greekLetter: Parser[VarNode] = "\\" ~> greekLetterName ^^ {
+    _ match {
+      case s => new VarNode(s)
+    }
+  }
 
   def doubleValue = decimalNumber ^^ {
     _ match {
@@ -88,11 +89,11 @@ class ExpressionParser extends JavaTokenParsers {
     }
   }
 
-  def variable: Parser[VarNode] = (ident | greekLetterName) ^^ {
+  def variable: Parser[VarNode] = ident ^^ {
     _ match {
       case s => new VarNode(s)
     }
-  }
+  } | greekLetter
 
   def binaryOp(level: Int): Parser[((ExpressionNode, ExpressionNode) => ExpressionNode)] = {
     level match {
