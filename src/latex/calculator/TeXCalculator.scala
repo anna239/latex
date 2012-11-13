@@ -9,10 +9,6 @@ case class TeXCalculator() {
 
   val values = new mutable.HashMap[String, TeXValue[Double]]()
 
-  def setVal(name: String, value: Int) {
-    values += ((name, new TeXValue[Int](value)))
-  }
-
   def calculate(formula: Node): Double = {
     formula match {
       case VarNode(name) => values(name).value
