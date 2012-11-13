@@ -1,5 +1,7 @@
 package latex.formulaextractor
 
+import java.io.File
+
 
 class FormulaExtractor {
   def extract(doc: String): Array[String] = {
@@ -8,5 +10,12 @@ class FormulaExtractor {
     }.map {
       case (s, i) => s
     }
+  }
+
+  def extract(file: File): Array[String] = {
+    var s = ""
+    for {line <- io.Source.fromFile(file).getLines()}
+      s += line
+    extract(s)
   }
 }

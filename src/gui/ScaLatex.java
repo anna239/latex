@@ -1,5 +1,7 @@
 package gui;
 
+import latex.formulaextractor.FormulaExtractor;
+
 import javax.swing.*;
 import java.awt.*;
 
