@@ -28,6 +28,8 @@ public class FormulaPanel extends JPanel {
         Box b1 = Box.createVerticalBox();
         Box b2 = Box.createHorizontalBox();
 
+        flabel = new JLabel();
+
         setFormula(generateIcon(formula));
 
         buttons = new JPanel();
@@ -51,7 +53,6 @@ public class FormulaPanel extends JPanel {
         BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         g2.fillRect(0,0,icon.getIconWidth(),icon.getIconHeight());
-        flabel = new JLabel();
         flabel.setIcon(icon);
     }
 
