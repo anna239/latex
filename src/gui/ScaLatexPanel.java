@@ -5,10 +5,18 @@ import java.awt.*;
 
 public class ScaLatexPanel extends JPanel {
     public ScaLatexPanel(String[] formulae) {
-        setLayout(new GridLayout(formulae.length, 1));
+        JPanel panel = new JPanel();
+        BoxLayout bl = new BoxLayout(panel, BoxLayout.Y_AXIS);
+        panel.setLayout(bl);
+
+        JScrollPane pane = new JScrollPane(panel);
+        add(pane, BorderLayout.CENTER);
+
+        setPreferredSize(new Dimension(400, 600));
+
         for (int i = 0; i < formulae.length; i++) {
             try {
-                add(new FormulaPanel(formulae[i]));
+                panel.add(new FormulaPanel(formulae[i]));
             } catch (Exception e) {
                 e.printStackTrace();
             }
