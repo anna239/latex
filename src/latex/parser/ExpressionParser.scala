@@ -15,7 +15,7 @@ class ExpressionParser extends JavaTokenParsers {
 
   def parensExpr: Parser[ExpressionNode] = "(" ~> expr <~ ")" | "[" ~> expr <~ "]"
 
-  def sumDeclaration: Parser[(VarNode, ExpressionNode, ExpressionNode)] = "\\sum_{" ~> (((variable~"="~expr) <~ "}^") ~ arg) ^^ {
+  def sumDeclaration: Parser[(VarNode, ExpressionNode, ExpressionNode)] = "\\sum_{" ~> (((variable~"="~expr) <~ "}^") ~ formalArg) ^^ {
     _ match {
       case s => ((s._1._1._1, s._1._2, s._2))
     }
@@ -51,17 +51,25 @@ class ExpressionParser extends JavaTokenParsers {
     }
   }
 
-  def arg = "{" ~> expr <~ "}" | singleTerm
+  def formalArg = "{" ~> expr <~ "}" | singleTerm
 
-  def texFunction: Parser[FunctionNode] = texOperator ~ rep1(arg) ^^ {
+  def optionalArg = "[" ~> expr <~ "]"
+
+  def texFunction: Parser[FunctionNode] = texOperator ~ (rep(optionalArg) ~ rep1(formalArg)) ^^ {
     _ match {
-      case s => new FunctionNode(Function.forName(s._1),  s._2)
+      case s => {
+        val name = s._1
+        val formalArgs = s._2._2
+        val optionalArgs = s._2._1
+        val allArgs = optionalArgs.union(formalArgs)
+        new FunctionNode(Function.getPredefinedFunction(name, allArgs.size),  allArgs)
+      }
     }
   }
 
-  def mathFunction: Parser[ExpressionNode] = mathOperator ~ "^" ~ singleTerm ~ rep1(arg) ^^ {
+  def mathFunction: Parser[ExpressionNode] = mathOperator ~ "^" ~ singleTerm ~ rep1(formalArg) ^^ {
     _ match {
-      case s => new BinOpNode(new FunctionNode(Function.forName(s._1._1._1), s._2), s._1._2, Power)
+      case s => new BinOpNode(new FunctionNode(Function.getPredefinedFunction(s._1._1._1, s._2.size), s._2), s._1._2, Power)
     }
   }
 

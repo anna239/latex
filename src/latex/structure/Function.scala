@@ -7,9 +7,10 @@ object Function {
     ArcCosFunction, ArcTanFunction, ArcCotFunction)
   val predefinedFunctions = List(SqrtFunction, SqrtnFunction, FracFunction) ++ mathFunctions
 
-  def forName(name: String): Function = {
+  def getPredefinedFunction(name: String, args: Int): Function = {
     predefinedFunctions.find({
-      name == _.name
+      (f: FixedArgumentsFunction) =>
+        name == f.name && args == f.argumentsCount
     }).getOrElse(throw new IllegalStateException("Unknown function: " + name))
   }
 }
