@@ -4,7 +4,6 @@ import util.parsing.combinator.JavaTokenParsers
 import latex.structure._
 import latex.structure.BinOpNode
 import latex.structure.VarNode
-import com.sun.xml.internal.xsom.impl.parser.state.group
 
 class ExpressionParser extends JavaTokenParsers {
 

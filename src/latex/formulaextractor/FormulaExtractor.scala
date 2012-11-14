@@ -14,7 +14,7 @@ class FormulaExtractor {
 
   def extract(file: File): Array[String] = {
     var s = ""
-    for {line <- io.Source.fromFile(file).getLines()}
+    for {line <- io.Source.fromFile(file, "utf-8").getLines()}
       s += line + " "
     extract(s)
 
