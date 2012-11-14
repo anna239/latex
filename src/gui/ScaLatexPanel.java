@@ -4,19 +4,27 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ScaLatexPanel extends JPanel {
+    private static final Insets INSETS = new Insets(5, 5, 5, 5);
+
     public ScaLatexPanel(String[] formulae) {
-        JPanel panel = new JPanel();
-        BoxLayout bl = new BoxLayout(panel, BoxLayout.Y_AXIS);
-        panel.setLayout(bl);
+        setLayout(new GridBagLayout());
 
-        add(panel);
-
+        int cnt = 0;
         for (String aFormulae : formulae) {
             try {
-                panel.add(new FormulaPanel(aFormulae));
+                add(new SingleFormulaPanel(aFormulae), new GridBagConstraints(0, cnt, 1, 1, 1, 0,
+                        GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, INSETS, 0, 0));
+                ++cnt;
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
+        }
+        add(new JLabel(), new GridBagConstraints(0, cnt, 1, 1, 1, 1,
+                GridBagConstraints.NORTH, GridBagConstraints.BOTH, INSETS, 0, 0));
+        if (cnt == 0) {
+            setLayout(new GridLayout(1, 1));
+            JLabel label = new JLabel("No parseable formulae found.", SwingConstants.CENTER);
+            add(label);
         }
     }
 }

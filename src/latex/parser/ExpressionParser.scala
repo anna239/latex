@@ -15,7 +15,7 @@ class ExpressionParser extends JavaTokenParsers {
 
   def parensExpr: Parser[ExpressionNode] = "(" ~> expr <~ ")" | "[" ~> expr <~ "]"
 
-  def sumDeclaration: Parser[(VarNode, ExpressionNode, ExpressionNode)] = "\\sum_{" ~> (((variable~"="~expr) <~ "}^") ~ formalArg) ^^ {
+  def sumDeclaration: Parser[(VarNode, ExpressionNode, ExpressionNode)] = "\\sum_{" ~> (((variable ~ "=" ~ expr) <~ "}^") ~ formalArg) ^^ {
     _ match {
       case s => ((s._1._1._1, s._1._2, s._2))
     }
@@ -36,8 +36,9 @@ class ExpressionParser extends JavaTokenParsers {
 
   def alwaysFails: Parser[String] = """\\0""".r
 
-  def texOperator:Parser[String] = "\\" ~> Function.predefinedFunctions.map(it => it.name).foldLeft(alwaysFails)((seed, it) => seed | it)
-  def mathOperator:Parser[String] = "\\" ~> Function.mathFunctions.map(it => it.name).foldLeft(alwaysFails)((seed:Parser[String], it:String) => seed | it)
+  def texOperator: Parser[String] = "\\" ~> Function.predefinedFunctions.map(it => it.name).foldLeft(alwaysFails)((seed, it) => seed | it)
+
+  def mathOperator: Parser[String] = "\\" ~> Function.mathFunctions.map(it => it.name).foldLeft(alwaysFails)((seed: Parser[String], it: String) => seed | it)
 
   def oneCharVar = """[a-zA-Z]""".r ^^ {
     _ match {
@@ -62,7 +63,7 @@ class ExpressionParser extends JavaTokenParsers {
         val formalArgs = s._2._2
         val optionalArgs = s._2._1
         val allArgs = optionalArgs.union(formalArgs)
-        new FunctionNode(Function.getPredefinedFunction(name, allArgs.size),  allArgs)
+        new FunctionNode(Function.getPredefinedFunction(name, allArgs.size), allArgs)
       }
     }
   }
@@ -84,9 +85,9 @@ class ExpressionParser extends JavaTokenParsers {
     allLetters.foldLeft(alwaysFails)((l, r) => l | r)
   }
 
-  def greekLetter: Parser[VarNode] = "\\" ~> greekLetterName ^^ {
+  def greekLetter: Parser[VarNode] = "\\" ~ greekLetterName ^^ {
     _ match {
-      case s => new VarNode(s)
+      case sl ~ n => new VarNode(sl + n)
     }
   }
 
@@ -108,16 +109,16 @@ class ExpressionParser extends JavaTokenParsers {
         "+" ^^^ {
           (l: ExpressionNode, r: ExpressionNode) => new BinOpNode(l, r, Plus)
         } |
-        "-" ^^^ {
-          (l: ExpressionNode, r: ExpressionNode) => new BinOpNode(l, r, Minus)
-        }
+          "-" ^^^ {
+            (l: ExpressionNode, r: ExpressionNode) => new BinOpNode(l, r, Minus)
+          }
       case 2 =>
         "*" ^^^ {
           (l: ExpressionNode, r: ExpressionNode) => new BinOpNode(l, r, Multiplication)
         } |
-        "/" ^^^ {
-          (l: ExpressionNode, r: ExpressionNode) => new BinOpNode(l, r, Division)
-        }
+          "/" ^^^ {
+            (l: ExpressionNode, r: ExpressionNode) => new BinOpNode(l, r, Division)
+          }
       case 3 =>
         "^" ^^^ {
           (l: ExpressionNode, r: ExpressionNode) => new BinOpNode(l, r, Power)

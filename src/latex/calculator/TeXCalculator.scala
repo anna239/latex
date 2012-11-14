@@ -8,15 +8,21 @@ import latex.structure.Plus
 case class TeXCalculator() {
 
   val values = new mutable.HashMap[String, TeXValue[Double]]()
-  values += (("pi", new TeXValue[Double](scala.math.Pi)))
+  values += (("\\pi", new TeXValue[Double](scala.math.Pi)))
   values += (("e", new TeXValue[Double](scala.math.E)))
+
+  def getVal(name: String): Double = {
+    values.getOrElse(name, new TeXValue[Double](0)).value
+  }
 
   def setVal(name: String, value: Double) {
     values += ((name, new TeXValue[Double](value)))
   }
 
-  def setContext(names: Array[String], vals:Array[Double]) {
-    names.zip(vals).foreach {case (n, v) => values += ((n, new TeXValue[Double](v)))}
+  def setContext(names: Array[String], vals: Array[Double]) {
+    names.zip(vals).foreach {
+      case (n, v) => values += ((n, new TeXValue[Double](v)))
+    }
   }
 
   def calculate(formula: Node): Double = {
@@ -31,8 +37,27 @@ case class TeXCalculator() {
     }
   }
 
-  def evalSumNode(sumVar: VarNode, from: Int, to: Int, body: ExpressionNode):Double = {
-    var result:Double = 0
+  def valsRequired(formula: Node): mutable.Set[String] = {
+    formula match {
+      case VarNode(name) => mutable.Set(name)
+      case IntLiteralNode(value) => mutable.Set.empty
+      case DoubleLiteralNode(value) => mutable.Set.empty
+      case BinOpNode(left, right, op) => valsRequired(left).union(valsRequired(right))
+      case FunctionNode(function, arguments) => arguments.foldLeft(mutable.Set.empty: mutable.Set[String])({
+        case (a, b) => valsRequired(b).union(a)
+      })
+      case UnOpNode(op, operand) => valsRequired(operand)
+      case SumNode(sumVar, from, to, body) => valsRequired(body).diff(valsRequired(sumVar))
+      case _ => mutable.Set.empty
+    }
+  }
+
+  def valsRequiredAsArray(formula: Node): Array[String] = {
+    valsRequired(formula).toArray
+  }
+
+  def evalSumNode(sumVar: VarNode, from: Int, to: Int, body: ExpressionNode): Double = {
+    var result: Double = 0
     for (i <- from to to) {
       values += ((sumVar.name, new TeXValue[Double](i)))
       result += calculate(body)
@@ -63,7 +88,6 @@ case class TeXCalculator() {
       case ArcCotFunction => math.atan(1 / calculate(ArcCotFunction.getArgument(args)))
     }
   }
-
 
 
   private def evalBinOp(l: ExpressionNode, r: ExpressionNode, op: BinaryOperation): Double = {

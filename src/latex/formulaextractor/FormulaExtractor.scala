@@ -17,6 +17,5 @@ class FormulaExtractor {
     for {line <- io.Source.fromFile(file, "utf-8").getLines()}
       s += line + " "
     extract(s)
-
   }
 }
