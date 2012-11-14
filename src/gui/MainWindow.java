@@ -93,7 +93,7 @@ public class MainWindow extends JFrame {
     private MainWindow() {
         setTitle("ScaLaTeX");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
+
         setLayout(new GridLayout(1, 1));
 
         MenuBar menuBar = new MenuBar();
@@ -140,6 +140,8 @@ public class MainWindow extends JFrame {
 
         setMinimumSize(new Dimension(400, 600));
         setLocationRelativeTo(null);
+
+        setVisible(true);
     }
 
 
