@@ -95,19 +95,19 @@ class ParserTest extends FlatSpec with ShouldMatchers {
     val calculator = new TeXCalculator
     parser.parse("\\rho + \\varsigma")
     calculator.setVal("r", 3)
-    calculator.calculate(parser.parse("\\pi * r^2 / 2")) shouldBe 14.13
+    calculator.calculate(parser.parse("\\pi * r^2 / 2")) shouldBe (math.Pi * 9 / 2)
   }
 
   "Parser" should "parse trigonometric functions" in {
     val parser = new ExpressionParser
     val calculator = new TeXCalculator
-    println(calculator.calculate(parser.parse("(\\cos^2 2) + (\\sin^2 2) ")))
+    calculator.calculate(parser.parse("(\\cos^2 2) + (\\sin^2 2) ")) shouldBe 1.0
   }
 
   "Parser" should "parse sum" in {
     val parser = new ExpressionParser
     val calculator = new TeXCalculator
-    println(calculator.calculate(parser.parse("\\sum_{i=0}^{10} i")))
+    calculator.calculate(parser.parse("\\sum_{i=0}^{10} i")) shouldBe (55)
   }
 
 
