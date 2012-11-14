@@ -8,7 +8,8 @@ import latex.structure.Plus
 case class TeXCalculator() {
 
   val values = new mutable.HashMap[String, TeXValue[Double]]()
-  values += (("pi", new TeXValue[Double](3.14)))
+  values += (("pi", new TeXValue[Double](scala.math.Pi)))
+  values += (("e", new TeXValue[Double](scala.math.E)))
 
   def setVal(name: String, value: Double) {
     values += ((name, new TeXValue[Double](value)))
