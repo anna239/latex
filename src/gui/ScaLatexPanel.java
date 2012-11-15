@@ -19,12 +19,15 @@ public class ScaLatexPanel extends JPanel {
                 System.out.println(e.getMessage());
             }
         }
-        add(new JLabel(), new GridBagConstraints(0, cnt, 1, 1, 1, 1,
-                GridBagConstraints.NORTH, GridBagConstraints.BOTH, INSETS, 0, 0));
+
         if (cnt == 0) {
+            removeAll();
             setLayout(new GridLayout(1, 1));
             JLabel label = new JLabel("No parseable formulae found.", SwingConstants.CENTER);
             add(label);
+        } else {
+            add(new JLabel(), new GridBagConstraints(0, cnt, 1, 1, 1, 1,
+                    GridBagConstraints.NORTH, GridBagConstraints.BOTH, INSETS, 0, 0));
         }
     }
 }
