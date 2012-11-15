@@ -23,6 +23,7 @@ public class EvaluationFrame extends JFrame {
 
     private String[] names;
     private double[] values;
+    private JTextField[] valueFields;
 
     private TeXCalculator calc = new TeXCalculator();
 
@@ -47,26 +48,24 @@ public class EvaluationFrame extends JFrame {
 
         names = calc.valsRequiredAsArray(formulaAST);
         values = new double[names.length];
+        valueFields = new JTextField[names.length];
 
         for (int i = 0; i < names.length; ++i) {
             final JLabel variableLabel = new JLabel();
             variableLabel.setIcon(GuiUtils.generateIcon(names[i] + " ="));
 
-            final JTextField valueText = new JTextField();
-            valueText.setText(String.valueOf(values[i] = calc.getVal(names[i])));
-            calc.setVal(names[i], calc.getVal(names[i]));
+            final JTextField valueText = valueFields[i] = new JTextField();
+            valueText.setText(String.valueOf(calc.getVal(names[i])));
 
             add(variableLabel, new GridBagConstraints(0, i + 1, 1, 1, 0, 0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, GuiUtils.INSETS, 0, 0));
             add(valueText, new GridBagConstraints(1, i + 1, 1, 1, 0, 0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, GuiUtils.INSETS, 0, 0));
 
-            final int _i = i;
             valueText.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        values[_i] = Double.parseDouble(valueText.getText());
                         updateResult();
                     } catch (Exception ex) {
                         //do nothing
@@ -86,6 +85,7 @@ public class EvaluationFrame extends JFrame {
 
     private void updateResult() {
         try {
+            for (int i = 0; i < names.length; ++i) values[i] = Double.parseDouble(valueFields[i].getText());
             calc.setContext(names, values);
             formulaLabel.setIcon(GuiUtils.generateIcon(formula + " = " + calc.calculate(formulaAST)));
         } catch (Exception e) {
