@@ -1,8 +1,6 @@
 package gui;
 
 import latex.calculator.TeXCalculator;
-import latex.formulaextractor.FormulaExtractor;
-import latex.parser.ExpressionParser;
 import latex.structure.Node;
 
 import javax.swing.*;
@@ -11,9 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Arrays;
-
-import static gui.GuiUtils.INSETS;
 
 /**
  * Created with IntelliJ IDEA.
@@ -74,6 +69,7 @@ public class EvaluationFrame extends JFrame {
                         values[_i] = Double.parseDouble(valueText.getText());
                         updateResult();
                     } catch (Exception ex) {
+                        //do nothing
                     }
                 }
             });
