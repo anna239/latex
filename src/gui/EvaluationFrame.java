@@ -62,9 +62,9 @@ public class EvaluationFrame extends JFrame {
             calc.setVal(names[i], calc.getVal(names[i]));
 
             add(variableLabel, new GridBagConstraints(0, i + 1, 1, 1, 0, 0,
-                    GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, GuiUtils.INSETS, 0, 0));
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, GuiUtils.INSETS, 0, 0));
             add(valueText, new GridBagConstraints(1, i + 1, 1, 1, 0, 0,
-                    GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, GuiUtils.INSETS, 0, 0));
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, GuiUtils.INSETS, 0, 0));
 
             final int _i = i;
             valueText.addActionListener(new ActionListener() {
